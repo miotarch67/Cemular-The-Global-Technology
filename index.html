@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEMULAR — Future Unlocked.</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        midnight: '#030712',
+                        deepspace: '#050b18',
+                        electricblue: '#00f0ff',
+                        subtlecyan: '#38bdf8',
+                        cemularorange: '#ff6600',
+                        cemularglow: 'rgba(0, 240, 255, 0.15)',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #030712;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: rgba(5, 11, 24, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 240, 255, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-panel-hover:hover {
+            border-color: rgba(0, 240, 255, 0.4);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.2);
+        }
+
+        .glow-blue {
+            text-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+        }
+        
+        .box-glow-blue {
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.25);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #030712;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 240, 255, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 240, 255, 0.6);
+        }
+    </style>
+</head>
+<body class="bg-midnight text-gray-100 relative selection:bg-electricblue selection:text-black">
+
+    <div id="loading-screen" class="fixed inset-0 z-50 bg-midnight flex flex-col items-center justify-center transition-opacity duration-700">
+        <div class="relative w-32 h-32 mb-8 flex items-center justify-center">
+            <div class="absolute inset-0 border-2 border-electricblue/20 rounded-full animate-ping"></div>
+            <div class="absolute inset-2 border-2 border-t-electricblue border-r-transparent border-b-cemularorange border-l-transparent rounded-full animate-spin"></div>
+            <div class="text-electricblue font-mono font-bold text-xl tracking-widest glow-blue">C</div>
+        </div>
+        <div class="text-center">
+            <h2 class="text-2xl font-black tracking-widest text-white mb-2 uppercase">CEMULAR OS</h2>
+            <p id="loading-status" class="text-xs font-mono text-electricblue tracking-widest animate-pulse">INITIALIZING QUANTUM CORE...</p>
+            <div class="w-64 h-1 bg-gray-800 rounded-full mt-4 overflow-hidden mx-auto">
+                <div id="loading-bar" class="h-full bg-gradient-to-r from-electricblue to-cemularorange w-0 transition-all duration-300"></div>
+            </div>
+        </div>
+    </div>
+
+    <canvas id="particle-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
+
+    <nav class="fixed top-0 left-0 right-0 z-40 glass-panel border-b border-electricblue/20 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="#" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-electricblue to-cemularorange p-0.5 flex items-center justify-center shadow-lg group-hover:box-glow-blue transition-all duration-300">
+                    <div class="w-full h-full bg-midnight rounded-[10px] flex items-center justify-center">
+                        <span class="text-electricblue font-extrabold text-xl font-mono">C</span>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-black tracking-widest text-white">CEMULAR</span>
+                    <span class="text-[9px] font-mono tracking-widest text-electricblue uppercase">Future Unlocked</span>
+                </div>
+            </a>
+
+            <div class="hidden lg:flex items-center space-x-8 text-sm font-medium text-gray-300">
+                <a href="#home" class="hover:text-electricblue transition-colors">Home</a>
+                <a href="#divisions" class="hover:text-electricblue transition-colors">Products</a>
+                <a href="#ai-featured" class="hover:text-electricblue transition-colors">AI Research</a>
+                <a href="#innovations" class="hover:text-electricblue transition-colors">Robotics</a>
+                <a href="#products" class="hover:text-electricblue transition-colors">Technologies</a>
+                <a href="#map-section" class="hover:text-electricblue transition-colors">About</a>
+                <a href="#careers" class="hover:text-electricblue transition-colors">Careers</a>
+            </div>
+
+            <div class="hidden md:flex items-center space-x-4">
+                <button onclick="openModal('search-modal')" class="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-gray-300 hover:text-electricblue hover:border-electricblue transition-all">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+                <button onclick="openModal('login-modal')" class="px-4 py-2 rounded-lg text-sm font-semibold text-electricblue border border-electricblue/40 hover:bg-electricblue/10 transition-all">
+                    Login
+                </button>
+                <button onclick="openModal('explore-modal')" class="px-5 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-electricblue to-blue-600 text-midnight hover:opacity-90 box-glow-blue transition-all">
+                    Explore
+                </button>
+            </div>
+
+            <div class="lg:hidden flex items-center space-x-3">
+                <button onclick="openModal('search-modal')" class="w-9 h-9 rounded-lg glass-panel flex items-center justify-center text-gray-300">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+                <button id="mobile-menu-btn" class="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-electricblue">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="mobile-menu" class="fixed inset-0 z-50 bg-midnight/95 backdrop-blur-2xl flex flex-col justify-center px-8 transition-all duration-300 translate-x-full lg:hidden">
+        <button onclick="toggleMobileMenu()" class="absolute top-6 right-6 w-12 h-12 rounded-full glass-panel flex items-center justify-center text-electricblue text-xl">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="flex flex-col space-y-6 text-xl font-bold">
+            <a href="#home" onclick="toggleMobileMenu()" class="hover:text-electricblue transition-colors">Home</a>
+            <a href="#divisions" onclick="toggleMobileMenu()" class="hover:text-electricblue transition-colors">Products</a>
+            <a href="#ai-featured" onclick="toggleMobileMenu()" class="hover:text-electricblue transition-colors">AI Research</a>
+            <a href="#innovations" onclick="toggleMobileMenu()" class="hover:text-electricblue transition-colors">Robotics</a>
+            <a href="#products" onclick="toggleMobileMenu()" class="hover:text-electricblue transition-colors">Technologies</a>
+            <a href="#map-section" onclick="toggleMobileMenu()" class="hover:text-electricblue transition-colors">About</a>
+            <a href="#careers" onclick="toggleMobileMenu()" class="hover:text-electricblue transition-colors">Careers</a>
+        </div>
+        <div class="mt-10 flex flex-col space-y-4">
+            <button onclick="openModal('login-modal'); toggleMobileMenu();" class="w-full py-3 rounded-xl text-center font-semibold text-electricblue border border-electricblue/40">Login</button>
+            <button onclick="openModal('explore-modal'); toggleMobileMenu();" class="w-full py-3 rounded-xl text-center font-semibold bg-electricblue text-midnight">Explore Cemular</button>
+        </div>
+    </div>
+
+    <section id="home" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <div class="absolute inset-0 z-0 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-midnight/40 via-midnight/80 to-midnight z-10"></div>
+            <div class="absolute bottom-0 left-0 right-0 h-[60vh] bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-blue-900/40 via-deepspace to-midnight z-0"></div>
+            <div class="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,#00f0ff15_1px,transparent_1px),linear-gradient(to_bottom,#00f0ff15_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+            
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full flex justify-between items-end opacity-40 px-10 pointer-events-none">
+                <div class="w-16 h-[50vh] bg-gradient-to-t from-electricblue/20 to-transparent rounded-t-full blur-sm"></div>
+                <div class="w-24 h-[70vh] bg-gradient-to-t from-subtlecyan/30 to-transparent rounded-t-full blur-sm"></div>
+                <div class="w-32 h-[85vh] bg-gradient-to-t from-blue-600/30 to-transparent rounded-t-full blur-md flex items-center justify-center">
+                    <span class="text-electricblue font-mono font-bold text-xs tracking-widest opacity-80 rotate-90">CEMULAR HQ</span>
+                </div>
+                <div class="w-20 h-[60vh] bg-gradient-to-t from-cemularorange/20 to-transparent rounded-t-full blur-sm"></div>
+                <div class="w-16 h-[45vh] bg-gradient-to-t from-electricblue/20 to-transparent rounded-t-full blur-sm"></div>
+            </div>
+        </div>
+
+        <div class="relative z-20 max-w-5xl mx-auto px-4 text-center mt-12">
+            <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full glass-panel border border-electricblue/30 text-electricblue text-xs font-mono tracking-widest mb-6 animate-pulse">
+                <span class="w-2 h-2 rounded-full bg-electricblue animate-ping"></span>
+                <span>WELCOME TO CEMULAR</span>
+            </div>
+            
+            <h1 class="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight text-white mb-6 uppercase">
+                Future <span class="text-transparent bg-clip-text bg-gradient-to-r from-electricblue via-subtlecyan to-cemularorange glow-blue">Unlocked.</span>
+            </h1>
+            
+            <p class="max-w-3xl mx-auto text-lg sm:text-xl text-gray-300 font-light mb-10 leading-relaxed">
+                “Building intelligent technologies that redefine how people interact with the digital and physical world.”
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                <button onclick="scrollToSection('divisions')" class="w-full sm:w-auto px-8 py-4 rounded-xl font-bold bg-gradient-to-r from-electricblue to-blue-600 text-midnight box-glow-blue hover:scale-105 transition-all flex items-center justify-center space-x-3">
+                    <span>EXPLORE CEMULAR</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <button onclick="scrollToSection('products')" class="w-full sm:w-auto px-8 py-4 rounded-xl font-bold glass-panel text-white hover:border-electricblue hover:text-electricblue transition-all flex items-center justify-center space-x-3">
+                    <span>OUR TECHNOLOGIES</span>
+                    <i class="fa-solid fa-microchip"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="divisions" class="py-28 relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-xs font-mono text-electricblue tracking-widest uppercase mb-3">GLOBAL ECOSYSTEM</h2>
+            <h3 class="text-3xl sm:text-5xl font-black tracking-tight text-white uppercase">ONE COMPANY. MANY FRONTIERS.</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="glass-panel glass-panel-hover p-8 rounded-2xl relative overflow-hidden group transition-all duration-300">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-electricblue/10 rounded-full blur-2xl group-hover:bg-electricblue/20 transition-all"></div>
+                <div class="w-14 h-14 rounded-xl bg-electricblue/10 border border-electricblue/30 flex items-center justify-center text-electricblue text-2xl mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <h4 class="text-2xl font-bold text-white mb-3">Cemular AI</h4>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                    Advanced artificial intelligence, machine learning, intelligent assistants, and autonomous systems powering next-gen interaction.
+                </p>
+                <button onclick="openDetailModal('Cemular AI', 'Leading the frontier in artificial general intelligence, neural networks, and sentient assistance systems across planetary infrastructure.')" class="inline-flex items-center space-x-2 text-electricblue text-sm font-semibold group-hover:translate-x-2 transition-transform">
+                    <span>Explore Division</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+            </div>
+
+            <div class="glass-panel glass-panel-hover p-8 rounded-2xl relative overflow-hidden group transition-all duration-300">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-subtlecyan/10 rounded-full blur-2xl group-hover:bg-subtlecyan/20 transition-all"></div>
+                <div class="w-14 h-14 rounded-xl bg-subtlecyan/10 border border-subtlecyan/30 flex items-center justify-center text-subtlecyan text-2xl mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                </div>
+                <h4 class="text-2xl font-bold text-white mb-3">Cemular Devices</h4>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                    Smartphones, computers, wearable holographic displays, and next-generation consumer electronics engineered for perfection.
+                </p>
+                <button onclick="openDetailModal('Cemular Devices', 'Crafted with aerospace-grade titanium and quantum glass, our devices seamlessly integrate into your daily life.')" class="inline-flex items-center space-x-2 text-electricblue text-sm font-semibold group-hover:translate-x-2 transition-transform">
+                    <span>Explore Division</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+            </div>
+
+            <div class="glass-panel glass-panel-hover p-8 rounded-2xl relative overflow-hidden group transition-all duration-300">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-cemularorange/10 rounded-full blur-2xl group-hover:bg-cemularorange/20 transition-all"></div>
+                <div class="w-14 h-14 rounded-xl bg-cemularorange/10 border border-cemularorange/30 flex items-center justify-center text-cemularorange text-2xl mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <h4 class="text-2xl font-bold text-white mb-3">Cemular Robotics</h4>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                    Humanoid robots, industrial automation units, autonomous machines, and intelligent robotic systems redefining labor and assistance.
+                </p>
+                <button onclick="openDetailModal('Cemular Robotics', 'Autonomous bipedal units equipped with sensory feedback networks designed for hazardous industrial environments and home assistance.')" class="inline-flex items-center space-x-2 text-electricblue text-sm font-semibold group-hover:translate-x-2 transition-transform">
+                    <span>Explore Division</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+            </div>
+
+            <div class="glass-panel glass-panel-hover p-8 rounded-2xl relative overflow-hidden group transition-all duration-300">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all"></div>
+                <div class="w-14 h-14 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                </div>
+                <h4 class="text-2xl font-bold text-white mb-3">Cemular Cloud</h4>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                    Cloud computing, distributed neural systems, military-grade cybersecurity, and planetary data infrastructure for developers.
+                </p>
+                <button onclick="openDetailModal('Cemular Cloud', 'High-speed photonic data centers operating at sub-millisecond latencies worldwide, securing the global digital economy.')" class="inline-flex items-center space-x-2 text-electricblue text-sm font-semibold group-hover:translate-x-2 transition-transform">
+                    <span>Explore Division</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+            </div>
+
+            <div class="glass-panel glass-panel-hover p-8 rounded-2xl relative overflow-hidden group transition-all duration-300">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl group-hover:bg-purple-500/20 transition-all"></div>
+                <div class="w-14 h-14 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-satellite"></i>
+                </div>
+                <h4 class="text-2xl font-bold text-white mb-3">Cemular Space</h4>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                    Advanced aerospace technology, satellite quantum communication constellations, and deep space research initiatives.
+                </p>
+                <button onclick="openDetailModal('Cemular Space', 'Connecting Earth and beyond with quantum orbital relays and lunar research outposts.')" class="inline-flex items-center space-x-2 text-electricblue text-sm font-semibold group-hover:translate-x-2 transition-transform">
+                    <span>Explore Division</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+            </div>
+
+            <div class="glass-panel glass-panel-hover p-8 rounded-2xl relative overflow-hidden group transition-all duration-300">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-cemularorange/10 rounded-full blur-2xl group-hover:bg-cemularorange/20 transition-all"></div>
+                <div class="w-14 h-14 rounded-xl bg-cemularorange/10 border border-cemularorange/30 flex items-center justify-center text-cemularorange text-2xl mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-atom"></i>
+                </div>
+                <h4 class="text-2xl font-bold text-white mb-3">Cemular Research</h4>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                    Experimental technologies, quantum computing supremacy, advanced meta-materials, fusion energy systems, and future physics.
+                </p>
+                <button onclick="openDetailModal('Cemular Research', 'Pushing the boundaries of theoretical physics and material science to invent tomorrow today.')" class="inline-flex items-center space-x-2 text-electricblue text-sm font-semibold group-hover:translate-x-2 transition-transform">
+                    <span>Explore Division</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="ai-featured" class="py-28 relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="glass-panel p-8 sm:p-16 rounded-3xl relative overflow-hidden border border-electricblue/30">
+            <div class="absolute -right-20 -top-20 w-96 h-96 bg-electricblue/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -left-20 -bottom-20 w-96 h-96 bg-cemularorange/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+                <div>
+                    <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-electricblue/10 text-electricblue text-xs font-mono uppercase mb-4">
+                        <i class="fa-solid fa-sparkles"></i>
+                        <span>FLAGSHIP PLATFORM</span>
+                    </div>
+                    <h2 class="text-3xl sm:text-5xl font-black text-white uppercase mb-6">
+                        THE NEXT GENERATION <br>IS ALREADY <span class="text-electricblue glow-blue">HERE.</span>
+                    </h2>
+                    <h3 class="text-xl font-bold text-subtlecyan font-mono mb-4">CEMULAR AI</h3>
+                    <p class="text-gray-300 text-base leading-relaxed mb-8">
+                        “An intelligent technology platform designed to understand, create, analyze, and assist across the digital world with zero latency and absolute security.”
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <button onclick="openDetailModal('CEMULAR AI Core', 'Cemular AI processes 400 trillion parameters concurrently across neural substrates, providing sentient-grade assistance for quantum analysis and daily operations.')" class="px-6 py-3 rounded-xl font-bold bg-electricblue text-midnight hover:box-glow-blue transition-all">
+                            EXPLORE CEMULAR AI
+                        </button>
+                        <button onclick="openDetailModal('Research Whitepaper', 'Access our peer-reviewed technical publications detailing multi-modal neural convergence and quantum tokenization.')" class="px-6 py-3 rounded-xl font-bold glass-panel text-white hover:border-electricblue transition-all">
+                            VIEW RESEARCH
+                        </button>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 rounded-2xl border border-electricblue/40 relative">
+                    <div class="flex items-center justify-between pb-4 border-b border-gray-800 mb-6">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                        </div>
+                        <span class="text-xs font-mono text-electricblue">NEURAL_CORE_v9.4.exe</span>
+                    </div>
+                    
+                    <div class="flex flex-col items-center justify-center py-10 relative">
+                        <div class="w-48 h-48 rounded-full border border-electricblue/30 flex items-center justify-center animate-spin duration-[10000ms]">
+                            <div class="w-36 h-36 rounded-full border border-dashed border-cemularorange/50 flex items-center justify-center"></div>
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center flex-col text-center">
+                            <i class="fa-solid fa-microchip text-4xl text-electricblue animate-pulse mb-2"></i>
+                            <span class="text-xs font-mono text-gray-300">ACTIVE SYNAPSES</span>
+                            <span class="text-lg font-mono font-bold text-white">99.98% OPTIMAL</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-black/40 p-4 rounded-xl font-mono text-xs text-electricblue border border-electricblue/20">
+                        <p>> System initialized at 14:32:01 UTC</p>
+                        <p>> Quantum entanglement verified.</p>
+                        <p>> Neural weights optimized for global deployment.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="products" class="py-28 relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-xs font-mono text-electricblue tracking-widest uppercase mb-3">STATE OF THE ART</h2>
+            <h3 class="text-3xl sm:text-5xl font-black tracking-tight text-white uppercase">ENGINEERED FOR TOMORROW.</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="glass-panel glass-panel-hover rounded-2xl overflow-hidden group flex flex-col justify-between">
+                <div class="p-6 bg-gradient-to-b from-blue-950/40 to-transparent relative h-64 flex items-center justify-center">
+                    <div class="absolute top-4 right-4 px-3 py-1 rounded-full bg-electricblue/10 text-electricblue text-xs font-mono">FLAGSHIP</div>
+                    <i class="fa-solid fa-mobile-screen text-7xl text-electricblue group-hover:scale-110 transition-transform drop-shadow-[0_0_20px_rgba(0,240,255,0.4)]"></i>
+                </div>
+                <div class="p-8">
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="text-2xl font-bold text-white">Cemular N50</h4>
+                        <span class="text-electricblue font-mono font-bold">$1,299</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-6">Flagship smartphone featuring quantum neural processor and zero-bezel holographic glass display.</p>
+                    <button onclick="openDetailModal('Cemular N50 Specifications', 'Display: 6.8inch Quantum-OLED, Processor: Cemular N-Core V, Camera: 200MP Hyperspatial Sensor, Battery: 6000mAh Solid-State.')" class="w-full py-3 rounded-xl border border-electricblue/40 text-electricblue font-semibold hover:bg-electricblue hover:text-midnight transition-all text-center block">
+                        Learn More
+                    </button>
+                </div>
+            </div>
+
+            <div class="glass-panel glass-panel-hover rounded-2xl overflow-hidden group flex flex-col justify-between">
+                <div class="p-6 bg-gradient-to-b from-blue-950/40 to-transparent relative h-64 flex items-center justify-center">
+                    <div class="absolute top-4 right-4 px-3 py-1 rounded-full bg-subtlecyan/10 text-subtlecyan text-xs font-mono">ULTRA PERFORMANCE</div>
+                    <i class="fa-solid fa-laptop text-7xl text-subtlecyan group-hover:scale-110 transition-transform drop-shadow-[0_0_20px_rgba(56,189,248,0.4)]"></i>
+                </div>
+                <div class="p-8">
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="text-2xl font-bold text-white">Cemular NGD Max</h4>
+                        <span class="text-subtlecyan font-mono font-bold">$2,499</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-6">High-performance device engineered for deep learning, generative design, and quantum engineering simulations.</p>
+                    <button onclick="openDetailModal('Cemular NGD Max Specifications', 'Processor: 64-Core Quantum Engine, RAM: 128GB Unified Photonic Memory, Storage: 8TB Quantum NVMe Drive.')" class="w-full py-3 rounded-xl border border-subtlecyan/40 text-subtlecyan font-semibold hover:bg-subtlecyan hover:text-midnight transition-all text-center block">
+                        Learn More
+                    </button>
+                </div>
+            </div>
+
+            <div class="glass-panel glass-panel-hover rounded-2xl overflow-hidden group flex flex-col justify-between">
+                <div class="p-6 bg-gradient-to-b from-blue-950/40 to-transparent relative h-64 flex items-center justify-center">
+                    <div class="absolute top-4 right-4 px-3 py-1 rounded-full bg-cemularorange/10 text-cemularorange text-xs font-mono">EXPERIMENTAL</div>
+                    <i class="fa-solid fa-vr-cardboard text-7xl text-cemularorange group-hover:scale-110 transition-transform drop-shadow-[0_0_20px_rgba(255,102,0,0.4)]"></i>
+                </div>
+                <div class="p-8">
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="text-2xl font-bold text-white">Cemular SVV 1985</h4>
+                        <span class="text-cemularorange font-mono font-bold">$3,899</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-6">Premium experimental neural headset enabling direct thought-to-digital spatial rendering and full dive immersion.</p>
+                    <button onclick="openDetailModal('Cemular SVV 1985 Specifications', 'Sensors: Neural-link EEG array, Latency: 0.1ms, Display: Dual 16K Micro-LED Retinal Projectors.')" class="w-full py-3 rounded-xl border border-cemularorange/40 text-cemularorange font-semibold hover:bg-cemularorange hover:text-midnight transition-all text-center block">
+                        Learn More
+                    </button>
+                </div>
+            </div>
+
+            <div class="glass-panel glass-panel-hover rounded-2xl overflow-hidden group flex flex-col justify-between">
+                <div class="p-6 bg-gradient-to-b from-blue-950/40 to-transparent relative h-64 flex items-center justify-center">
+                    <div class="absolute top-4 right-4 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-mono">ENTERPRISE</div>
+                    <i class="fa-solid fa-server text-7xl text-blue-400 group-hover:scale-110 transition-transform drop-shadow-[0_0_20px_rgba(59,130,246,0.4)]"></i>
+                </div>
+                <div class="p-8">
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="text-2xl font-bold text-white">Cemular 785K</h4>
+                        <span class="text-blue-400 font-mono font-bold">$12,500</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-6">Advanced enterprise computing system for managing automated corporate infrastructure and planetary AI networks.</p>
+                    <button onclick="openDetailModal('Cemular 785K Specifications', 'Architecture: Modular Quantum Node Cluster, Cooling: Liquid Helium Super-conductor loop, Power: 5kW redundant feed.')" class="w-full py-3 rounded-xl border border-blue-500/40 text-blue-400 font-semibold hover:bg-blue-500 hover:text-white transition-all text-center block">
+                        Learn More
+                    </button>
+                </div>
+            </div>
+
+            <div class="glass-panel glass-panel-hover rounded-2xl overflow-hidden group flex flex-col justify-between md:col-span-2 lg:col-span-2">
+                <div class="p-6 bg-gradient-to-r from-blue-950/60 via-midnight to-midnight relative h-64 flex items-center justify-between px-12">
+                    <div>
+                        <div class="inline-block px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 text-xs font-mono mb-3">NEXT-GEN QUANTUM</div>
+                        <h4 class="text-4xl font-black text-white mb-2">Cemular XVX</h4>
+                        <p class="text-gray-400 max-w-md text-sm">The pinnacle of engineering. A shape-shifting multi-device continuum that transforms between tablet, neural terminal, and spatial communicator on command.</p>
+                    </div>
+                    <i class="fa-solid fa-cube text-8xl text-purple-400 group-hover:rotate-45 transition-transform duration-700 hidden sm:block drop-shadow-[0_0_30px_rgba(168,85,247,0.4)]"></i>
+                </div>
+                <div class="p-8 flex items-center justify-between border-t border-gray-800">
+                    <span class="text-purple-400 font-mono font-bold text-xl">$4,999</span>
+                    <button onclick="openDetailModal('Cemular XVX Specifications', 'Material: Metamorphic Titanium-Glass, Processing: Distributed Quantum Mesh, Availability: Limited Global Allocation.')" class="px-8 py-3 rounded-xl bg-purple-600 text-white font-semibold hover:bg-purple-500 transition-all">
+                        Reserve Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="innovations" class="py-28 relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-xs font-mono text-electricblue tracking-widest uppercase mb-3">FUTURE HEADQUARTERS</h2>
+            <h3 class="text-3xl sm:text-5xl font-black tracking-tight text-white uppercase">WHERE IMPOSSIBLE BECOMES ENGINEERING.</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="glass-panel p-6 rounded-2xl hover:border-electricblue transition-all group">
+                <div class="h-40 rounded-xl bg-gradient-to-br from-blue-900/40 to-midnight mb-6 flex items-center justify-center border border-electricblue/20">
+                    <i class="fa-solid fa-flask text-4xl text-electricblue group-hover:scale-125 transition-transform"></i>
+                </div>
+                <h4 class="text-lg font-bold text-white mb-2">AI Laboratories</h4>
+                <p class="text-xs text-gray-400 leading-relaxed">Dedicated to sentient model convergence and recursive self-improvement algorithms.</p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl hover:border-electricblue transition-all group">
+                <div class="h-40 rounded-xl bg-gradient-to-br from-cyan-900/40 to-midnight mb-6 flex items-center justify-center border border-subtlecyan/20">
+                    <i class="fa-solid fa-robot text-4xl text-subtlecyan group-hover:scale-125 transition-transform"></i>
+                </div>
+                <h4 class="text-lg font-bold text-white mb-2">Robotics Facilities</h4>
+                <p class="text-xs text-gray-400 leading-relaxed">Precision manufacturing plants for bipedal and autonomous mechanical systems.</p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl hover:border-electricblue transition-all group">
+                <div class="h-40 rounded-xl bg-gradient-to-br from-orange-900/40 to-midnight mb-6 flex items-center justify-center border border-cemularorange/20">
+                    <i class="fa-solid fa-microchip text-4xl text-cemularorange group-hover:scale-125 transition-transform"></i>
+                </div>
+                <h4 class="text-lg font-bold text-white mb-2">Semiconductor Research</h4>
+                <p class="text-xs text-gray-400 leading-relaxed">Developing angstrom-scale silicon and photonic processors for extreme workloads.</p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl hover:border-electricblue transition-all group">
+                <div class="h-40 rounded-xl bg-gradient-to-br from-purple-900/40 to-midnight mb-6 flex items-center justify-center border border-purple-500/20">
+                    <i class="fa-solid fa-atom text-4xl text-purple-400 group-hover:scale-125 transition-transform"></i>
+                </div>
+                <h4 class="text-lg font-bold text-white mb-2">Quantum Chambers</h4>
+                <p class="text-xs text-gray-400 leading-relaxed">Absolute-zero enclosures housing multi-qubit fault-tolerant processors.</p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl hover:border-electricblue transition-all group">
+                <div class="h-40 rounded-xl bg-gradient-to-br from-blue-900/40 to-midnight mb-6 flex items-center justify-center border border-blue-500/20">
+                    <i class="fa-solid fa-rocket text-4xl text-blue-400 group-hover:scale-125 transition-transform"></i>
+                </div>
+                <h4 class="text-lg font-bold text-white mb-2">Aerospace Laboratories</h4>
+                <p class="text-xs text-gray-400 leading-relaxed">Designing sub-orbital propulsion and quantum satellite constellations.</p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl hover:border-electricblue transition-all group">
+                <div class="h-40 rounded-xl bg-gradient-to-br from-cyan-900/40 to-midnight mb-6 flex items-center justify-center border border-electricblue/20">
+                    <i class="fa-solid fa-industry text-4xl text-electricblue group-hover:scale-125 transition-transform"></i>
+                </div>
+                <h4 class="text-lg font-bold text-white mb-2">Advanced Manufacturing</h4>
+                <p class="text-xs text-gray-400 leading-relaxed">Automated nanofabrication and meta-material synthesis complexes.</p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl hover:border-electricblue transition-all group">
+                <div class="h-40 rounded-xl bg-gradient-to-br from-orange-900/40 to-midnight mb-6 flex items-center justify-center border border-cemularorange/20">
+                    <i class="fa-solid fa-eye text-4xl text-cemularorange group-hover:scale-125 transition-transform"></i>
+                </div>
+                <h4 class="text-lg font-bold text-white mb-2">Holographic Interfaces</h4>
+                <p class="text-xs text-gray-400 leading-relaxed">Light-field projection systems for tactile volumetric computing.</p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl hover:border-electricblue transition-all group">
+                <div class="h-40 rounded-xl bg-gradient-to-br from-purple-900/40 to-midnight mb-6 flex items-center justify-center border border-purple-500/20">
+                    <i class="fa-solid fa-car text-4xl text-purple-400 group-hover:scale-125 transition-transform"></i>
+                </div>
+                <h4 class="text-lg font-bold text-white mb-2">Autonomous Vehicles</h4>
+                <p class="text-xs text-gray-400 leading-relaxed">Next-generation gravitational transport and aerial mobility craft.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="map-section" class="py-28 relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-xs font-mono text-electricblue tracking-widest uppercase mb-3">PLANETARY FOOTPRINT</h2>
+            <h3 class="text-3xl sm:text-5xl font-black tracking-tight text-white uppercase">GLOBAL TECHNOLOGY NETWORK.</h3>
+            <p class="text-gray-400 mt-3 max-w-2xl mx-auto text-sm">Hover over our global operational nodes to inspect facility metrics across continents.</p>
+        </div>
+
+        <div class="glass-panel p-8 sm:p-12 rounded-3xl relative overflow-hidden border border-electricblue/30">
+            <div class="relative w-full h-[400px] sm:h-[500px] bg-midnight/80 rounded-2xl border border-electricblue/20 flex items-center justify-center overflow-hidden">
+                <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#00f0ff_1px,transparent_1px)] bg-[size:2rem_2rem]"></div>
+                
+                <div class="absolute inset-10 opacity-30 flex items-center justify-center pointer-events-none">
+                    <i class="fa-solid fa-earth-americas text-[250px] sm:text-[400px] text-electricblue"></i>
+                </div>
+
+                <div class="absolute top-[35%] left-[22%] group cursor-pointer" onclick="openDetailModal('Cemular North America HQ', 'Silicon Valley, CA — Central global operations, core AI training cluster, and executive boardrooms.')">
+                    <div class="w-6 h-6 rounded-full bg-electricblue/30 animate-ping absolute -inset-1"></div>
+                    <div class="w-4 h-4 rounded-full bg-electricblue box-glow-blue relative z-10 flex items-center justify-center"></div>
+                    <div class="absolute left-6 top-0 glass-panel px-3 py-1 rounded text-xs font-mono text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-20 pointer-events-none">
+                        Silicon Valley HQ
+                    </div>
+                </div>
+
+                <div class="absolute top-[28%] left-[52%] group cursor-pointer" onclick="openDetailModal('Cemular European Quantum Hub', 'Geneva, Switzerland — Quantum computing supremacy labs and particle physics research.')">
+                    <div class="w-6 h-6 rounded-full bg-subtlecyan/30 animate-ping absolute -inset-1"></div>
+                    <div class="w-4 h-4 rounded-full bg-subtlecyan relative z-10 flex items-center justify-center"></div>
+                    <div class="absolute left-6 top-0 glass-panel px-3 py-1 rounded text-xs font-mono text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-20 pointer-events-none">
+                        Geneva Quantum Hub
+                    </div>
+                </div>
+
+                <div class="absolute top-[38%] left-[75%] group cursor-pointer" onclick="openDetailModal('Cemular Asia Robotics Complex', 'Tokyo & Neo-Seoul — Advanced humanoid robotics assembly and microchip fabrication.')">
+                    <div class="w-6 h-6 rounded-full bg-cemularorange/30 animate-ping absolute -inset-1"></div>
+                    <div class="w-4 h-4 rounded-full bg-cemularorange relative z-10 flex items-center justify-center"></div>
+                    <div class="absolute left-6 top-0 glass-panel px-3 py-1 rounded text-xs font-mono text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-20 pointer-events-none">
+                        Neo-Seoul Robotics
+                    </div>
+                </div>
+
+                <div class="absolute top-[55%] left-[18%] group cursor-pointer" onclick="openDetailModal('Cemular Space Research Center', 'Kennedy Space Center, FL — Orbital launch site and satellite constellation command.')">
+                    <div class="w-6 h-6 rounded-full bg-purple-500/30 animate-ping absolute -inset-1"></div>
+                    <div class="w-4 h-4 rounded-full bg-purple-400 relative z-10 flex items-center justify-center"></div>
+                    <div class="absolute left-6 top-0 glass-panel px-3 py-1 rounded text-xs font-mono text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-20 pointer-events-none">
+                        Space Research Center
+                    </div>
+                </div>
+
+                <div class="absolute bottom-4 left-4 glass-panel px-4 py-2 rounded-xl text-xs font-mono text-electricblue flex items-center space-x-2">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    <span>ALL GLOBAL NODES ONLINE & SECURE</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="glass-panel p-10 rounded-3xl border border-electricblue/30">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 text-center">
+                <div class="p-4">
+                    <div class="text-3xl sm:text-5xl font-black text-white font-mono mb-2 text-transparent bg-clip-text bg-gradient-to-r from-electricblue to-subtlecyan">100+</div>
+                    <p class="text-xs font-mono text-gray-400 uppercase tracking-widest">Research Facilities</p>
+                </div>
+                <div class="p-4">
+                    <div class="text-3xl sm:text-5xl font-black text-white font-mono mb-2 text-transparent bg-clip-text bg-gradient-to-r from-subtlecyan to-blue-500">50+</div>
+                    <p class="text-xs font-mono text-gray-400 uppercase tracking-widest">Countries</p>
+                </div>
+                <div class="p-4">
+                    <div class="text-3xl sm:text-5xl font-black text-white font-mono mb-2 text-transparent bg-clip-text bg-gradient-to-r from-electricblue to-cemularorange">10K+</div>
+                    <p class="text-xs font-mono text-gray-400 uppercase tracking-widest">Engineers & Researchers</p>
+                </div>
+                <div class="p-4">
+                    <div class="text-3xl sm:text-5xl font-black text-white font-mono mb-2 text-transparent bg-clip-text bg-gradient-to-r from-cemularorange to-yellow-400">1B+</div>
+                    <p class="text-xs font-mono text-gray-400 uppercase tracking-widest">Devices & Systems</p>
+                </div>
+                <div class="p-4 col-span-2 md:col-span-1">
+                    <div class="text-3xl sm:text-5xl font-black text-white font-mono mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-electricblue">100+</div>
+                    <p class="text-xs font-mono text-gray-400 uppercase tracking-widest">Patents & Tech</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="careers" class="py-28 relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="glass-panel p-8 sm:p-16 rounded-3xl relative overflow-hidden border border-electricblue/30 text-center">
+            <div class="absolute inset-0 bg-gradient-to-r from-blue-900/10 via-transparent to-cemularorange/10 pointer-events-none"></div>
+            
+            <h2 class="text-xs font-mono text-electricblue tracking-widest uppercase mb-3">JOIN THE FUTURE</h2>
+            <h3 class="text-3xl sm:text-5xl font-black text-white uppercase mb-6">BUILD WHAT COMES NEXT.</h3>
+            
+            <p class="max-w-3xl mx-auto text-gray-300 text-base sm:text-lg mb-10 leading-relaxed font-light">
+                “Cemular is looking for engineers, researchers, designers, scientists, programmers, and visionaries who want to solve problems that do not have answers yet.”
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                <button onclick="openModal('careers-modal')" class="w-full sm:w-auto px-8 py-4 rounded-xl font-bold bg-gradient-to-r from-electricblue to-blue-600 text-midnight box-glow-blue hover:scale-105 transition-all">
+                    EXPLORE CAREERS
+                </button>
+                <button onclick="openModal('careers-modal')" class="w-full sm:w-auto px-8 py-4 rounded-xl font-bold glass-panel text-white hover:border-electricblue transition-all">
+                    JOIN CEMULAR
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="pt-20 pb-12 relative z-10 border-t border-electricblue/20 bg-deepspace">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-16">
+                <div class="lg:col-span-1">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-electricblue to-cemularorange p-0.5 flex items-center justify-center">
+                            <div class="w-full h-full bg-midnight rounded-[6px] flex items-center justify-center">
+                                <span class="text-electricblue font-extrabold text-sm font-mono">C</span>
+                            </div>
+                        </div>
+                        <span class="text-lg font-black tracking-widest text-white">CEMULAR</span>
+                    </div>
+                    <p class="text-xs font-mono text-electricblue uppercase mb-4">Future Unlocked.</p>
+                    <p class="text-gray-400 text-xs leading-relaxed">
+                        Redefining the boundaries of human capability through intelligent hardware, robotics, quantum computing, and space infrastructure.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-sm tracking-widest uppercase mb-4">Company</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="#map-section" class="hover:text-electricblue transition-colors">About</a></li>
+                        <li><a href="#" class="hover:text-electricblue transition-colors">Leadership</a></li>
+                        <li><a href="#ai-featured" class="hover:text-electricblue transition-colors">Research</a></li>
+                        <li><a href="#careers" class="hover:text-electricblue transition-colors">Careers</a></li>
+                        <li><a href="#" class="hover:text-electricblue transition-colors">News</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-sm tracking-widest uppercase mb-4">Technology</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="#divisions" class="hover:text-electricblue transition-colors">AI</a></li>
+                        <li><a href="#divisions" class="hover:text-electricblue transition-colors">Robotics</a></li>
+                        <li><a href="#divisions" class="hover:text-electricblue transition-colors">Cloud</a></li>
+                        <li><a href="#products" class="hover:text-electricblue transition-colors">Devices</a></li>
+                        <li><a href="#divisions" class="hover:text-electricblue transition-colors">Space</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-sm tracking-widest uppercase mb-4">Resources</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-electricblue transition-colors">Developers</a></li>
+                        <li><a href="#" class="hover:text-electricblue transition-colors">Documentation</a></li>
+                        <li><a href="#" class="hover:text-electricblue transition-colors">Support</a></li>
+                        <li><a href="#" class="hover:text-electricblue transition-colors">Security</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-sm tracking-widest uppercase mb-4">Social</h4>
+                    <div class="flex space-x-4 text-lg text-gray-300">
+                        <a href="#" class="w-10 h-10 rounded-lg glass-panel flex items-center justify-center hover:text-electricblue hover:border-electricblue transition-all"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-lg glass-panel flex items-center justify-center hover:text-electricblue hover:border-electricblue transition-all"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-lg glass-panel flex items-center justify-center hover:text-electricblue hover:border-electricblue transition-all"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-lg glass-panel flex items-center justify-center hover:text-electricblue hover:border-electricblue transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-lg glass-panel flex items-center justify-center hover:text-electricblue hover:border-electricblue transition-all"><i class="fa-brands fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-gray-800 text-center text-xs font-mono text-gray-500">
+                <p>© 2026 Cemular Technologies. All rights reserved. Future Unlocked.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="search-modal" class="fixed inset-0 z-50 bg-midnight/90 backdrop-blur-xl hidden items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-2xl p-6 rounded-2xl border border-electricblue/40 relative">
+            <button onclick="closeModal('search-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-xl font-bold text-white mb-4">Search Cemular Network</h3>
+            <div class="relative mb-4">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-electricblue"></i>
+                <input type="text" placeholder="Search technologies, products, research papers, labs..." class="w-full bg-midnight/80 border border-electricblue/30 rounded-xl py-3 pl-12 pr-4 text-white text-sm focus:outline-none focus:border-electricblue font-mono">
+            </div>
+            <div class="space-y-2 text-xs font-mono text-gray-400">
+                <p class="text-electricblue">SUGGESTED QUERIES:</p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1 rounded bg-electricblue/10 text-electricblue cursor-pointer">Cemular N50</span>
+                    <span class="px-3 py-1 rounded bg-electricblue/10 text-electricblue cursor-pointer">Quantum Computing</span>
+                    <span class="px-3 py-1 rounded bg-electricblue/10 text-electricblue cursor-pointer">Humanoid Robotics</span>
+                    <span class="px-3 py-1 rounded bg-electricblue/10 text-electricblue cursor-pointer">AI Core v9.4</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="login-modal" class="fixed inset-0 z-50 bg-midnight/90 backdrop-blur-xl hidden items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md p-8 rounded-2xl border border-electricblue/40 relative">
+            <button onclick="closeModal('login-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 rounded-xl bg-electricblue/10 border border-electricblue/30 mx-auto flex items-center justify-center text-electricblue text-xl mb-3">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white">Cemular ID Login</h3>
+                <p class="text-xs text-gray-400 font-mono mt-1">SECURE NEURAL AUTHENTICATION</p>
+            </div>
+            <form onsubmit="event.preventDefault(); closeModal('login-modal'); showNotification('Successfully authenticated via neural key!');" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-mono text-gray-300 mb-2">NEURAL ID / EMAIL</label>
+                    <input type="email" required placeholder="agent@cemular.tech" class="w-full bg-midnight/80 border border-electricblue/30 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-electricblue font-mono">
+                </div>
+                <div>
+                    <label class="block text-xs font-mono text-gray-300 mb-2">PASSKEY / ENCRYPTION PIN</label>
+                    <input type="password" required placeholder="••••••••••••" class="w-full bg-midnight/80 border border-electricblue/30 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-electricblue font-mono">
+                </div>
+                <button type="submit" class="w-full py-3 rounded-xl bg-electricblue text-midnight font-bold hover:box-glow-blue transition-all">
+                    AUTHENTICATE
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="explore-modal" class="fixed inset-0 z-50 bg-midnight/90 backdrop-blur-xl hidden items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-2xl p-8 rounded-2xl border border-electricblue/40 relative">
+            <button onclick="closeModal('explore-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-2xl font-bold text-white mb-2">Welcome to Cemular</h3>
+            <p class="text-xs font-mono text-electricblue mb-6">EXPLORE THE FUTURE UNLOCKED ECOSYSTEM</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                <div class="p-4 rounded-xl glass-panel hover:border-electricblue cursor-pointer" onclick="closeModal('explore-modal'); scrollToSection('divisions');">
+                    <i class="fa-solid fa-microchip text-electricblue text-xl mb-2"></i>
+                    <h4 class="font-bold text-white text-sm">Products & Divisions</h4>
+                    <p class="text-xs text-gray-400 mt-1">Explore our 6 advanced technological frontiers.</p>
+                </div>
+                <div class="p-4 rounded-xl glass-panel hover:border-electricblue cursor-pointer" onclick="closeModal('explore-modal'); scrollToSection('ai-featured');">
+                    <i class="fa-solid fa-brain text-electricblue text-xl mb-2"></i>
+                    <h4 class="font-bold text-white text-sm">Cemular AI Core</h4>
+                    <p class="text-xs text-gray-400 mt-1">Discover our flagship intelligence platform.</p>
+                </div>
+            </div>
+            <button onclick="closeModal('explore-modal')" class="w-full py-3 rounded-xl border border-electricblue/40 text-electricblue font-semibold hover:bg-electricblue/10 transition-all">
+                Close & Return
+            </button>
+        </div>
+    </div>
+
+    <div id="detail-modal" class="fixed inset-0 z-50 bg-midnight/90 backdrop-blur-xl hidden items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-xl p-8 rounded-2xl border border-electricblue/40 relative">
+            <button onclick="closeModal('detail-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+            <div id="detail-modal-icon" class="w-12 h-12 rounded-xl bg-electricblue/10 border border-electricblue/30 flex items-center justify-center text-electricblue text-xl mb-4">
+                <i class="fa-solid fa-circle-info"></i>
+            </div>
+            <h3 id="detail-modal-title" class="text-2xl font-bold text-white mb-3">Title</h3>
+            <p id="detail-modal-desc" class="text-gray-300 text-sm leading-relaxed mb-6">Description goes here.</p>
+            <button onclick="closeModal('detail-modal'); showNotification('Action registered successfully.');" class="w-full py-3 rounded-xl bg-electricblue text-midnight font-bold hover:box-glow-blue transition-all">
+                CONFIRM / PROCEED
+            </button>
+        </div>
+    </div>
+
+    <div id="careers-modal" class="fixed inset-0 z-50 bg-midnight/90 backdrop-blur-xl hidden items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-lg p-8 rounded-2xl border border-electricblue/40 relative">
+            <button onclick="closeModal('careers-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-2xl font-bold text-white mb-2">Join Cemular</h3>
+            <p class="text-xs font-mono text-electricblue mb-6">SUBMIT YOUR CREDENTIALS FOR REVIEW</p>
+            <form onsubmit="event.preventDefault(); closeModal('careers-modal'); showNotification('Application transmitted to Silicon Valley HQ!');" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-mono text-gray-300 mb-2">FULL NAME</label>
+                    <input type="text" required placeholder="Dr. Alex Vance" class="w-full bg-midnight/80 border border-electricblue/30 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-electricblue font-mono">
+                </div>
+                <div>
+                    <label class="block text-xs font-mono text-gray-300 mb-2">SPECIALIZATION / DIVISION</label>
+                    <select class="w-full bg-midnight/80 border border-electricblue/30 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-electricblue font-mono">
+                        <option>Artificial Intelligence & Neural Nets</option>
+                        <option>Quantum Computing & Physics</option>
+                        <option>Humanoid Robotics & Mechanics</option>
+                        <option>Aerospace & Satellite Systems</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-mono text-gray-300 mb-2">PORTFOLIO / RESEARCH PAPERS URL</label>
+                    <input type="url" required placeholder="https://github.com/yourprofile" class="w-full bg-midnight/80 border border-electricblue/30 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-electricblue font-mono">
+                </div>
+                <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-electricblue to-blue-600 text-midnight font-bold hover:box-glow-blue transition-all">
+                    SUBMIT APPLICATION
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast-notification" class="fixed bottom-6 right-6 z-50 glass-panel px-6 py-4 rounded-xl border border-electricblue/50 text-electricblue font-mono text-xs shadow-2xl transition-all duration-300 translate-y-32 opacity-0 flex items-center space-x-3">
+        <i class="fa-solid fa-circle-check text-base"></i>
+        <span id="toast-message">Notification message</span>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            const loadingBar = document.getElementById('loading-bar');
+            const loadingScreen = document.getElementById('loading-screen');
+            
+            setTimeout(() => { loadingBar.style.width = '40%'; document.getElementById('loading-status').innerText = 'LOADING QUANTUM SUBSTRATES...'; }, 200);
+            setTimeout(() => { loadingBar.style.width = '80%'; document.getElementById('loading-status').innerText = 'CALIBRATING HOLOGRAPHIC GRIDS...'; }, 500);
+            setTimeout(() => { 
+                loadingBar.style.width = '100%'; 
+                document.getElementById('loading-status').innerText = 'FUTURE UNLOCKED.';
+                setTimeout(() => {
+                    loadingScreen.style.opacity = '0';
+                    setTimeout(() => { loadingScreen.style.display = 'none'; }, 700);
+                }, 400);
+            }, 800);
+        });
+
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        for (let i = 0; i < 60; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 1.5 + 0.5,
+                vx: (Math.random() - 0.5) * 0.4,
+                vy: (Math.random() - 0.5) * 0.4,
+                color: Math.random() > 0.5 ? '#00f0ff' : '#ff6600'
+            });
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                if (p.x < 0) p.x = canvas.width;
+                if (p.x > canvas.width) p.x = 0;
+                if (p.y < 0) p.y = canvas.height;
+                if (p.y > canvas.height) p.y = 0;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('translate-x-full');
+        }
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+            document.getElementById(modalId).classList.add('flex');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('flex');
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function openDetailModal(title, desc) {
+            document.getElementById('detail-modal-title').innerText = title;
+            document.getElementById('detail-modal-desc').innerText = desc;
+            openModal('detail-modal');
+        }
+
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showNotification(message) {
+            const toast = document.getElementById('toast-notification');
+            document.getElementById('toast-message').innerText = message;
+            toast.classList.remove('translate-y-32', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-32', 'opacity-0');
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
